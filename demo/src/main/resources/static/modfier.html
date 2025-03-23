@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        label,input{
+         width:100%;
+         }
+    </style>
+</head>
+<body>
+<form id="forme">
+    <label for="id">id</label>
+    <input type="number" name="id" id="id">
+    <label for="name">name</label>
+    <input type="text" id="name" name="name">
+    <label for="email">email</label>
+    <input type="email" id="email" name="email">
+    <button type="submit">envoiyer</button>
+</form>
+
+</body>
+<script>
+    async function modifier(event){
+      event.preventDefault();
+      const name=document.getElementById('name').value;
+      const email=document.getElementById('email').value;
+      const id=document.getElementById('id').value;
+      const produit={
+            name:name,
+            email:email
+
+
+      }
+      try{
+
+          const reponse = await fetch(`api/modifier/${id}`,{
+               method:'PUT',
+               headers:{
+                 'Content-Type':'application/json'
+               },
+               body:JSON.stringify(produit)
+
+          });
+          if(reponse.ok){
+            alert('modifier');
+
+          }else{
+            alert('erreure');
+          }
+
+      }catch(error){
+        console.log("erreure",error);
+      }
+
+
+    }
+    document.getElementById('forme').addEventListener('submit',modifier);
+
+
+</script>
+</html>

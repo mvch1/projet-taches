@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Produits</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<h1>Gestion des Produits</h1>
+
+<!-- Formulaire d'ajout de produit -->
+<div class="form-container">
+    <h2>Ajouter un produit</h2>
+    <form id="produitForm">
+        <label for="name">Nom du produit:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+        <br><br>
+        <button type="submit">Ajouter</button>
+    </form>
+</div>
+
+<!-- Liste des produits -->
+<h2>Liste des produits</h2>
+<table id="produitTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Les produits seront ajoutés ici par JavaScript -->
+    </tbody>
+</table>
+
+<script>
+    // Fonction pour ajouter un produit via une requête POST
+    async function ajouterProduit(event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+
+        const produit = {
+            name: name,
+            email: email
+        };
+
+        // Appel à l'API pour ajouter un produit
+        try {
+            const response = await fetch('/api/enregestrer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(produit),
+            });
+
+            if (response.ok) {
+                alert("Produit ajouté avec succès!");
+                afficherProduits(); // Recharge la liste des produits
+                document.getElementById('produitForm').reset(); // Réinitialiser le formulaire
+            } else {
+                alert("Erreur lors de l'ajout du produit.");
+            }
+        } catch (error) {
+            console.error("Erreur lors de l'appel à l'API", error);
+            alert("Une erreur est survenue.");
+        }
+    }
+
+    // Fonction pour afficher tous les produits via une requête GET
+    async function afficherProduits() {
+        try {
+            const response = await fetch('/api/afficher');
+            if (response.ok) {
+                const produits = await response.json();
+                const produitTableBody = document.getElementById('produitTable').getElementsByTagName('tbody')[0];
+                produitTableBody.innerHTML = ''; // Vider la table avant de la remplir
+
+                produits.forEach(produit => {
+                    const row = produitTableBody.insertRow();
+                    row.innerHTML = `
+                        <td>${produit.id}</td>
+                        <td>${produit.name}</td>
+                        <td>${produit.email}</td>
+                    `;
+                });
+            } else {
+                alert("Erreur lors de la récupération des produits.");
+            }
+        } catch (error) {
+            console.error("Erreur lors de l'appel à l'API", error);
+            alert("Une erreur est survenue.");
+        }
+    }
+
+    // Ajouter un produit lorsque le formulaire est soumis
+    document.getElementById('produitForm').addEventListener('submit', ajouterProduit);
+
+    // Charger la liste des produits lors du chargement de la page
+    window.onload = afficherProduits;
+</script>
+</body>
+</html>
