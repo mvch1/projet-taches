@@ -1,9 +1,6 @@
 package com.example.demo.controllers;
 
 import com.example.demo.models.Notifications;
-import com.example.demo.models.Projets;
-import com.example.demo.models.Taches;
-import com.example.demo.models.Users;
 import com.example.demo.services.NotificationsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +12,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/notifications")
 public class NotificationsController {
-
     final private NotificationsService notificationsService;
-  public NotificationsController(NotificationsService notificationsService){
+    public NotificationsController(NotificationsService notificationsService){
       this.notificationsService=notificationsService;
 
   }
@@ -28,7 +24,7 @@ public class NotificationsController {
   @GetMapping("/afficher")
   public List<Notifications> afficher(@RequestParam UUID destinataire_id){
       return notificationsService.afficherService(destinataire_id);
-      }
+    }
   @GetMapping("/dernier/{UUID}")
   public Notifications dernier(@PathVariable  UUID destinataire_id){
       return  notificationsService.dernierService(destinataire_id);
@@ -52,6 +48,10 @@ public class NotificationsController {
       }
 
 
+  }
+  @GetMapping("/affichernonlue")
+  public  List<Notifications> afficherNonLue(@RequestParam UUID user_id){
+        return notificationsService.afficherNonLueService(user_id);
   }
   @DeleteMapping("/suprimerTous")
   public  void suprimerTous(UUID destinataire_id){

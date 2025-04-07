@@ -1,31 +1,29 @@
 package com.example.demo.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity(name ="Notifications")
 
-
 public class Notifications {
     @Id
     private UUID id;
+    @Column(nullable = false)
     private String message;
-    @ManyToOne(optional = true)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "destinataire_id")
     private Users destinataire;
     private boolean lue=false ;
     private  LocalDateTime dateEnvoi=LocalDateTime.now();
-    @ManyToOne(optional = true)
+    @ManyToOne()
     @JoinColumn(name = "Taches_id")
     private Taches tache;
-    @ManyToOne(optional = true)
+    @ManyToOne(optional = false)
     @JoinColumn(name ="proprietaire_id")
     private  Users proprietaire;
-    @ManyToOne(optional = true)
+    @ManyToOne()
     @JoinColumn(name = "Projets_id")
     private  Projets projets ;
 

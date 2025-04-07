@@ -1,6 +1,6 @@
 package com.example.demo.models;
 
-import jakarta.annotation.Nullable;
+
 import jakarta.persistence.*;
 
 @Entity

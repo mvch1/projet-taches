@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.models.Notifications;
 
+import com.example.demo.models.Projets;
 import com.example.demo.models.Users;
 import com.example.demo.repositories.NotificationsRepository;
 import org.springframework.stereotype.Service;
@@ -23,17 +24,23 @@ public class NotificationsService {
     public List<Notifications> afficherService(UUID destinataire_id){
         Users destinataire = new Users();
         destinataire.setId(destinataire_id);
-        return notificationsRepository.findByDestinataireAndLueFalse(destinataire);
+        return notificationsRepository.findByDestinataire(destinataire);
     }
     public Notifications  dernierService(UUID destinataire_id){
         Users destinataire = new Users();
         destinataire.setId(destinataire_id);
         return notificationsRepository.findTopByDestinataireOrderByDateEnvoiDesc(destinataire);
     }
+    public List<Notifications> afficherNonLueService(UUID user_id){
+        Users users=new Users();
+        users.setId(user_id);
+       return notificationsRepository.findByDestinataireAndLueFalse(users);
+    }
     public boolean lireService(UUID  notificationId){
         Optional<Notifications> notifications=notificationsRepository.findById(notificationId);
         if(notifications.isPresent()){
             notifications.get().setLue(true);
+            notificationsRepository.save(notifications.get());
             return true;
         }else{
             return false;
@@ -57,6 +64,7 @@ public class NotificationsService {
                notificationsRepository.deleteAllByDestinataire(users);
 
      }
+
 
 
 }

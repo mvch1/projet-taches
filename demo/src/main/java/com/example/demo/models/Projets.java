@@ -1,6 +1,5 @@
 package com.example.demo.models;
 
-
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -15,14 +14,14 @@ import static com.example.demo.models.Statut.EN_COURS;
 public class Projets {
     @Id
     private UUID id ;
+    @Column(nullable = false,unique = true)
     private  String nom;
     private   String description;
     private LocalDateTime dateCreation=LocalDateTime.now() ;
     @Enumerated(EnumType.STRING)
-    private Statut statut=EN_COURS;
+    private Statut statut=Statut.EN_COURS;
 
-
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "proprietaire_id")
     private Users proprietaire;
     @ManyToMany(mappedBy = "projets")

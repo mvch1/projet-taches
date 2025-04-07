@@ -1,6 +1,12 @@
 package com.example.demo.models;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,23 +14,30 @@ import java.util.UUID;
 @Entity(name ="Users")
 
 
-public class Users {
+public class Users implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id=UUID.randomUUID() ;
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String name ;
-    @Column(unique = true )
     private String email;
+    @Column(nullable = false)
     private String motdepasse;
-    @Enumerated(EnumType.STRING)
+    private  boolean actif=false;
+    @OneToOne(cascade=CascadeType.ALL )
     private Role role;
-    private LocalDateTime dateInscription;
+    private LocalDateTime dateInscription=LocalDateTime.now();
+
+
+    public void setActif(boolean actif) {
+        this.actif = actif;
+    }
+
     @ManyToMany
     @JoinTable(
             name = "Users_Projets",
             joinColumns = @JoinColumn(name = "Users_id"),
-            inverseJoinColumns = @JoinColumn(name = "Projets_id"))
+            inverseJoinColumns = @JoinColumn(name = "Projets_id")
+    )
     private List<Projets> projets;
     @OneToMany(mappedBy = "proprietaire")
     private List<Projets> projetsPossedes;
@@ -37,6 +50,41 @@ public class Users {
     @OneToMany(mappedBy = "destinataire", cascade = CascadeType.ALL)
     private List<Notifications> notificationsRecues;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE"+this.role.getLibelle()));
+    }
+
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return actif;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return actif;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return actif;
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return actif;
+    }
     public UUID getId() {
         return id;
     }

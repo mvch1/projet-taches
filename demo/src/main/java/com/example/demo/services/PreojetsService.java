@@ -30,7 +30,8 @@ public class PreojetsService {
         users.setId(user_id);
         return projetsRepository.findByMembresContaining(users);
     }
-    public void   envoiyerService( Projets projets){
+    public void   envoiyerService(Projets projets){
+
         projetsRepository.save(projets);
     }
     public boolean ajouterMembreService(List<Users> membres,UUID projet_id){
@@ -72,6 +73,42 @@ public class PreojetsService {
 
         }
     }
+    public boolean modifierNomService(UUID projet_id,String nom ){
+        Optional<Projets> optional =projetsRepository.findById(projet_id);
+        if (optional.isPresent()){
+            Projets projets=optional.get();
+            projets.setNom(nom);
+            projetsRepository.save(projets);
+            return true;
 
+        }else {
+            return false;
+
+        }
+    }
+    public boolean modifierMessageService(UUID projet_id,String message ){
+        Optional<Projets> optional =projetsRepository.findById(projet_id);
+        if (optional.isPresent()){
+            Projets projets=optional.get();
+            projets.setNom(message);
+            projetsRepository.save(projets);
+            return true;
+
+        }else {
+            return false;
+
+        }
+    }
+    public boolean modifierProjetService(Projets projets){
+        Optional<Projets> optional =projetsRepository.findById(projets.getId());
+        if (optional.isPresent()){
+            projetsRepository.save(projets);
+            return true;
+
+        }else {
+            return false;
+
+        }
+    }
 
 }

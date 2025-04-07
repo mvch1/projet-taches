@@ -13,21 +13,23 @@ public class Taches {
     @Id
     private UUID id;
     private String titre;
+    @Column(nullable = false)
     private String description;
-    private Statut statut ;
+    @Enumerated(EnumType.STRING)
+    private Statut statut=Statut.EN_COURS ;
     private LocalDate dateEcheance;
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(
             name = "Taches_Assignees",
-            joinColumns = @JoinColumn(name = "tache_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+            joinColumns = @JoinColumn(name = "tache_id",nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "user_id",nullable = false)
     )
     private List<Users> assigneA;
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "Users_id")
     private Users createPar;
-    private LocalDateTime dateCreation;
-    @ManyToOne
+    private LocalDateTime dateCreation=LocalDateTime.now();
+    @ManyToOne(optional = false)
     @JoinColumn(name = "Projets_id")
     private Projets projet;
     @OneToMany(mappedBy = "tache")

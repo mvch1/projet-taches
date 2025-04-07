@@ -59,11 +59,29 @@ public class ProjetsController {
         }else {
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
     }
-
-
-
-
-
+    @PutMapping("/modifiernom")
+    public  ResponseEntity<Projets>  modifierNom(@RequestParam  UUID user_id ,@RequestParam String nom){
+        if(preojetsService.modifierNomService(user_id,nom)){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else {
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @PutMapping("/modifiermessage")
+    public  ResponseEntity<Projets>  modifierMessage(@RequestParam  UUID user_id ,@RequestParam String message){
+        if(preojetsService.modifierNomService(user_id,message)){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else {
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @PutMapping("/modifier")
+    public  ResponseEntity<String> modifierProjet(@RequestBody  Projets projets){
+        if(preojetsService.modifierProjetService(projets)){
+            return  new ResponseEntity<>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

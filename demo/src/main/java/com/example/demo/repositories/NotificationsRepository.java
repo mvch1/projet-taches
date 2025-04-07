@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface NotificationsRepository extends JpaRepository<Notifications, UUID> {
-    List<Notifications> findByDestinataireAndLueFalse(Users destinateire);
+    List<Notifications> findByDestinataire(Users destinateire);
+    List<Notifications> findByDestinataireAndLueFalse(Users destinataire);
     Notifications findTopByDestinataireOrderByDateEnvoiDesc(Users destinataire);
     void deleteAllByDestinataire(Users destinataire);
 
